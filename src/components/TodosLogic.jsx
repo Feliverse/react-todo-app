@@ -1,6 +1,7 @@
 import InputTodo from './InputTodo';
 import TodosList from './TodosList';
 import { useState } from 'react';
+import { v4 as uuidv4 } from "uuid";
 
 const TodosLogic = () => {
   const [todos, setTodos] = useState([
@@ -20,6 +21,16 @@ const TodosLogic = () => {
       completed: true,
     },
   ]);
+
+  const addTodoItem = (title) => {
+    const newTodo = {
+      id: uuidv4(),
+      title: title,
+      completed: false,
+    };
+    setTodos([...todos, newTodo]);
+  };
+  
   
   const handleChange = (id) => {
     setTodos((prevState) =>
@@ -45,7 +56,7 @@ const TodosLogic = () => {
 
   return (
     <div>
-      <InputTodo />
+      <InputTodo addTodoItem={addTodoItem} />
       <TodosList todosProps={todos} setTodos={setTodos} delTodo={delTodo}/>
     </div>
   );

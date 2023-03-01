@@ -1,27 +1,10 @@
 import InputTodo from './InputTodo';
 import TodosList from './TodosList';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from "uuid";
 
 const TodosLogic = () => {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: 'Setup development environment',
-      completed: true,
-    },
-    {
-      id: 2,
-      title: 'Develop website and add content',
-      completed: false,
-    },
-    {
-      id: 3,
-      title: 'Deploy to live server',
-      completed: true,
-    },
-  ]);
-
+  const [todos, setTodos] = useState(getInitialTodos());
   const addTodoItem = (title) => {
     const newTodo = {
       id: uuidv4(),
@@ -63,6 +46,18 @@ const TodosLogic = () => {
       })
     );
   };
+  
+  useEffect(() => {
+    // storing todos items
+    const temp = JSON.stringify(todos);
+    localStorage.setItem('todos', temp);
+  }, [todos]);
+  function getInitialTodos() {
+    // getting stored items
+    const temp = localStorage.getItem('todos');
+    const savedTodos = JSON.parse(temp);
+    return savedTodos || [];
+  }
   return (
     <div>
       <InputTodo addTodoItem={addTodoItem} />
